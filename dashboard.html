@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Penjualan — jual hp samsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #ffffff;
+            --accent-gold: #d4af37;
+            --glass-bg: rgba(25, 25, 25, 0.55);
+            --glass-border: rgba(212, 175, 55, 0.15);
+            --font-main: 'Outfit', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            width: 100%;
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #ffffff;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: var(--accent-gold);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-gold);
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            max-width: 1300px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 20px;
+            flex: 1;
+        }
+
+        .welcome-section {
+            margin-bottom: 35px;
+        }
+
+        .welcome-section h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .welcome-section p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 15px;
+        }
+
+        /* Stats Grid Counters */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .stat-value.gold {
+            color: var(--accent-gold);
+        }
+
+        .stat-change {
+            font-size: 13px;
+            color: #2ec4b6; /* Green hint for positive change */
+        }
+
+        /* Main Dashboard Content Layout */
+        .dashboard-content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: #ffffff;
+            border-left: 3px solid var(--accent-gold);
+            padding-left: 12px;
+        }
+
+        /* Custom Responsive Glass Table */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-gold);
+            padding: 16px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            font-weight: 600;
+        }
+
+        td {
+            padding: 16px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-weight: 300;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.success { background: rgba(46, 196, 182, 0.15); color: #2ec4b6; }
+        .status-badge.pending { background: rgba(212, 175, 55, 0.15); color: var(--accent-gold); }
+
+        /* Stock Progress Bar */
+        .product-stock-item {
+            margin-bottom: 20px;
+        }
+
+        .product-info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .stock-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .stock-bar-fill {
+            height: 100%;
+            background-color: var(--accent-gold);
+            border-radius: 10px;
+        }
+
+        footer {
+            background: #020202;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            padding: 35px 20px;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+        }
+
+        @media (max-width: 992px) {
+            .dashboard-content-grid { grid-template-columns: 1fr; }
+            .navbar { flex-direction: column; gap: 15px; }
+            .footer-content { flex-direction: column; gap: 15px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">jual <span>hp samsung</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="welcome-section">
+            <h1>Sales Overview</h1>
+            <p>Selamat datang kembali di panel monitoring penjualan unit flagship.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="glass-card">
+                <div class="stat-label">Total Pendapatan</div>
+                <div class="stat-value gold">Rp 1.420.500.000</div>
+                <div class="stat-change">+12.4% dari bulan lalu</div>
+            </div>
+            <div class="glass-card">
+                <div class="stat-label">Unit Terjual</div>
+                <div class="stat-value">84 Unit</div>
+                <div class="stat-change">+8.2% peningkatan volume</div>
+            </div>
+            <div class="glass-card">
+                <div class="stat-label">Pengunjung Premium</div>
+                <div class="stat-value">3,120</div>
+                <div class="stat-change">+5.1% konversi rasio</div>
+            </div>
+        </div>
+
+        <div class="dashboard-content-grid">
+            <div class="glass-card">
+                <h2 class="section-title">Transaksi Terakhir</h2>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID Order</th>
+                                <th>Model Unit</th>
+                                <th>Kapasitas</th>
+                                <th>Jumlah</th>
+                                <th>Total Harga</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#S26-0091</td>
+                                <td>Galaxy S26 Ultra</td>
+                                <td>512GB</td>
+                                <td>1</td>
+                                <td>Rp 21.999.000</td>
+                                <td><span class="status-badge success">Selesai</span></td>
+                            </tr>
+                            <tr>
+                                <td>#S26-0090</td>
+                                <td>Galaxy S26+</td>
+                                <td>256GB</td>
+                                <td>2</td>
+                                <td>Rp 33.998.000</td>
+                                <td><span class="status-badge success">Selesai</span></td>
+                            </tr>
+                            <tr>
+                                <td>#S26-0089</td>
+                                <td>Galaxy S26 Ultra</td>
+                                <td>1TB</td>
+                                <td>1</td>
+                                <td>Rp 25.999.000</td>
+                                <td><span class="status-badge pending">Proses</span></td>
+                            </tr>
+                            <tr>
+                                <td>#S26-0088</td>
+                                <td>Galaxy S26 Base</td>
+                                <td>256GB</td>
+                                <td>1</td>
+                                <td>Rp 13.999.000</td>
+                                <td><span class="status-badge success">Selesai</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h2 class="section-title">Alokasi Stok Seri S26</h2>
+                
+                <div class="product-stock-item">
+                    <div class="product-info-row">
+                        <span>S26 Ultra (Titanium Black)</span>
+                        <strong>12 Unit Sisa</strong>
+                    </div>
+                    <div class="stock-bar-bg">
+                        <div class="stock-bar-fill" style="width: 35%;"></div>
+                    </div>
+                </div>
+
+                <div class="product-stock-item">
+                    <div class="product-info-row">
+                        <span>S26+ (Exclusive Violet)</span>
+                        <strong>34 Unit Sisa</strong>
+                    </div>
+                    <div class="stock-bar-bg">
+                        <div class="stock-bar-fill" style="width: 75%;"></div>
+                    </div>
+                </div>
+
+                <div class="product-stock-item">
+                    <div class="product-info-row">
+                        <span>S26 Base (Silver Shadow)</span>
+                        <strong>48 Unit Sisa</strong>
+                    </div>
+                    <div class="stock-bar-bg">
+                        <div class="stock-bar-fill" style="width: 90%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <a href="#" class="logo" style="font-size: 16px;">jual <span>hp samsung</span></a>
+            <div class="footer-text">&copy; 2026 jual hp samsung Project. All Rights Reserved.</div>
+        </div>
+    </footer>
+
+</body>
+</html>
